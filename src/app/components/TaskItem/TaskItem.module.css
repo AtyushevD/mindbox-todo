@@ -1,0 +1,71 @@
+.divider {
+    background-color: var(--color-border-hint);
+    border: none;
+    height: 1px;
+    width: 100%;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 8px;
+    position: relative;
+}
+
+.checkbox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--color-border-hint);
+    border-radius: 50%;
+}
+
+.input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.item {
+    font-size: var(--fsz-item);
+    color: var(--color-todo-name);
+    font-weight: 300;
+    line-height: 100%;
+}
+
+.itemCompleted {
+    color: var(--color-border-hint);
+    text-decoration: line-through;
+    font-weight: 300;
+    line-height: 100%;
+    font-size: var(--fsz-item);
+}
+
+.deleteButton {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

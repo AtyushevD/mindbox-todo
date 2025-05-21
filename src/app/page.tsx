@@ -1,95 +1,90 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import { useState, useEffect } from 'react';
+import { Container, Box } from '@mui/material';
+
+import {TaskInput} from './components/TaskInput';
+import {TaskList} from './components/TaskList';
+import {FilterButtons} from './components/FilterButtons';
+import { ClearCompletedButton } from './components/ClearCompletedButton';
+import useLocalStorage from './hooks/useLocalStorage';
+
+import { Task } from '../types';
+
+import styles from './page.module.css';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [tasks, setTasks] = useLocalStorage<Task[]>('mindbox-todo', []);
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [hasMounted, setHasMounted] = useState(false);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    setHasMounted(true)
+    const storedTasks = localStorage.getItem('mindbox-todo')
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (hasMounted) {
+      localStorage.setItem('mindbox-todo', JSON.stringify(tasks))
+    }
+  }, [tasks, hasMounted])
+
+  const addTask = (text: string) => {
+    const newTask: Task = {
+      id: Date.now().toString(),
+      text,
+      completed: false,
+      createdAt: new Date(),
+    };
+    setTasks(prevTasks => [...prevTasks, newTask]);
+  };
+
+  const toggleTask = (id: string) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  const deleteTask = (id: string) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+  };
+
+  const clearCompleted = () => {
+    setTasks(prevTask => prevTask.filter(task => !task.completed));
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    if (filter === 'active') return !task.completed;
+    if (filter === 'completed') return task.completed;
+    return true;
+  });
+
+  if (!hasMounted) {
+    return null
+  }
+
+  return (
+    <Container maxWidth="lg">
+      <Box className={styles.box}>
+        <h1 className={styles.mainHeader}>todos</h1>
+        <div className={styles.wrapper}>
+          <TaskInput onAddTask={addTask} />
+          <TaskList
+            tasks={filteredTasks}
+            onToggleTask={toggleTask}
+            onDeleteTask={deleteTask}
+          />
+          <div className={styles.filter}>
+            <span className={styles.count}>{tasks.filter(task => !task.completed).length} items left</span>
+            <FilterButtons filter={filter} setFilter={setFilter} />
+            <ClearCompletedButton onToggle={clearCompleted}/>
+          </div>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </Box>
+    </Container>
   );
 }

@@ -1,0 +1,12 @@
+.divider {
+    background-color: var(--color-border-hint);
+    border: none;
+    height: 1px;
+    width: 100%;
+}
+
+.emptyMessage {
+    padding: 17px 16px;
+    display: block;
+    opacity: 0.5;
+}

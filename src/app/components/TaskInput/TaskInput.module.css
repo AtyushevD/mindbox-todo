@@ -1,0 +1,26 @@
+.taskInputBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 12px 8px;
+    gap: 16px;
+}
+
+.taskInput {
+    width: 100%;
+    font-family: inherit;
+    font-size: var(--fsz-item);
+    flex: 1 0 0;
+    font-weight: 300;
+}
+
+.taskInput:placeholder-shown {
+   font-style: italic;
+   opacity: 0.5;
+}
+
+.icon {
+    width: 32px;
+    height: 32px
+}
