@@ -1,6 +1,7 @@
 # Mindbox ToDo Application
 
 Простое и удобное ToDo-приложение, разработанное в рамках тестового задания для Mindbox.
+https://mindbox-todo-pi.vercel.app/
 
 ## 🚀 Особенности
 
