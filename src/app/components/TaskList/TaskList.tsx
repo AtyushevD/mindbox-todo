@@ -14,7 +14,7 @@ export const TaskList = ({ tasks, onToggleTask, onDeleteTask }: TaskListProps) =
   if (tasks.length === 0) {
     return <div>
       <hr className={styles.divider} />
-      <span className={styles.emptyMessage}>There's nothing yet</span>
+      <span className={styles.emptyMessage}>There&apos;s nothing yet</span>
       <hr className={styles.divider} />
     </div>;
   }
